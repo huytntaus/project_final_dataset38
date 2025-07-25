@@ -1,0 +1,407 @@
+---
+title: "EEMB 146 Final Report: Example with Palmer Penguin Data (change this to your own title- puns encouraged!)"
+author: "Caitlin Nordheim-Maestas, adapted from Tatum Katz & Kacie Ring"
+date: "today"
+output: html_document
+---
+
+**This is a merely a template or the "bare bones" of what your final report should look like. Pay attention to the document format and figure labels within {r} and go back to the final project instructions document for all of the requirements!**
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE)
+# you must have echo = set to TRUE
+```
+
+```{r data and libraries, include=FALSE}
+# upload necessary libraries
+library(tidyverse)
+library(ggplot2)
+#install.packages("psych")
+library(psych)
+library(car)
+library(multcomp)
+library(cowplot)
+
+#install.packages("palmerpenguins")
+library(palmerpenguins) # for this example data
+
+# include other libraries you may need
+
+#load in your cleaned data
+dataset_38 <- read.csv("data/dataset_38.csv")
+
+
+```
+
+```{r}
+clean_data <- dataset_38 %>%
+  select(treat,SM,pH, block) %>%   # keep only relevant columns
+  drop_na() # remove all rows with NAs
+```
+
+
+
+## Abstract
+
+Here, I would write an abstract of this data analysis project. I would include a sentence each describing my motivation, the nature of the data, a rough explanation of my method, my result(s), and broad conclusions. (suggested length: 4-5 sentences).
+
+## Introduction
+
+Here, I would introduce the biological problem and give a general overview of my dataset, explaining what my data are and how they were collected. I would include where the data came from (database/paper/group) and cite it in this section. I would also include who collected the data, how many observations are in my (clean) dataset, and how many variables are in my (clean) dataset. I would also talk about my research questions, and why they are interesting and important. I would include background information about the biological system and make sure I cite 2-3 papers when discussing the biology.
+
+I would state my first goal/research question here (statistical question 1), for example, I aim to investigate whether there is difference in the body mass of Adelie penguins across islands. I would write my first hypothesis here **very** clearly, making sure to clearly specify what exactly my variables are. For example, I hypothesize that the body mass of Adelie penguins is the same across all islands. I would state my second goal/research question here (statistical question 2), for example, I aim to investigate whether the Adelie penguin body mass can be predicted by bill depth. I would write my second hypothesis here **very** clearly too. For example, I hypothesize that Adelie penguin body mass can be predicted by bill depth. (suggested length: ½ - 1 page)
+
+*Note: I would review the final project instructions to ensure I included all of the elements of the introduction required*
+
+*Note: I would also review the statistical hypotheses for each test in the labs and my lecture notes to ensure I am using the correct hypothesis for the test I am running.*
+
+## Exploratory Data Analysis
+
+In plain text: Describe your data, explain if/how you transformed your data, and why you chose the plots you used.
+
+First, I would describe any data cleaning that I did to my data set, including removing NA's, any subsetting, and how new columns or variables were created (or any other data cleaning done). I would give biological explanations for why I subsetted my data if I did. For example, I chose to only include Adelie penguins because they were the only species surveyed across multiple islands, and I am most interested in comparisons across islands. I would include all data cleaning code in the appendix, and cite it here (Appendix section 1).
+
+Next, I would describe the data transformations that I used, being very specific about why and how I transformed it. For example, in this data, the body mass of Adelie penguins was not normal, so I would say the untransformed body mass of Adelie penguins was not normally distributed (and describe in detail how I know it is not normal using terms we have used in Lab 2 - 3 and throughout course material), and that I chose to do a log-transformation to make the data normal, and explain in detail how I know it is normal now. I would include all of the code to back that up in the appendix and cite it here like this (Appendix section 2). I would also state whether there were outliers in my final dataset, and if there are, how I handled them.
+
+Next, I would interpret the three plots below in full sentences and describe the trends that I see and in a paragraph here, referencing each figure in the EDA in the text. I would include sentence(s) interpreting the graph for the distribution of y (Fig. 1). I would include sentence(s) interpreting my graph for y \~ x (numeric) (Fig. 2). I would include sentence(s) interpreting my graph for y \~ x (categorical) (Fig. 3).
+
+In chunks: Visualize your data in a meaningful way (boxplots, scatterplots, histograms, pair.panels)
+
+**Note**: you don't need ALL of these up here in the main report, pick the visualizations that best represent your data and leave the rest in the appendix
+
+**Note**: use par(mfrow=c(2,2)) to put multiple figures under one chunk
+
+*Note: I would review the rubric in the final project instructions to ensure I included all of the elements of the EDA required, including 1 graph for the distribution of y (1st numeric), 1 graph for y \~ x (numeric), 1 graph for y \~ x (1st categorical), describe the distribution of y in terms we have used in Lab 2 - 3 and throughout course material, explicitly mention if there are outliers or not.*
+
+Check out the R code below in the header of the code chunk to see how I got these figures to show up where I wanted them to with the figure caption directly below!
+
+```{r warnings=FALSE, fig.show="hold", echo=FALSE, output=FALSE, fig.cap= "Fig. 1: I would write a VERY informative figure caption here that explained EVERY THING about this plot! I would describe the distribution of y in terms we have used in Lab 2 - 3 and throughout course material "}
+
+## 1 graph for the distribution of y (1st numeric)
+
+# For funsies, let's include both a histogram and a qqplot in one chunk using pairs.panels, knowing that only one 1 graph for the distribution of y (1st numeric) is required.
+
+par(mfrow=c(1,2)) #include as one fig
+
+# y variable distribution
+
+# add a log transformed column
+dat <- dat %>% 
+  mutate(log_body_mass_g = log(body_mass_g))
+
+# plot it
+hist(dat$log_body_mass_g, main = "Main label for hist of y var", xlab="label (units)") # note: could also do a ggplot version of histogram instead
+qqPlot(dat$log_body_mass_g, main = "Main label for qqplot of y var", ylab="label")
+## I would double check that my axes include any relevant transformations and units and do not contain spelling errors. 
+
+par(mfrow=c(1,1))
+
+```
+
+```{r warnings=FALSE, fig.show="hold", echo=FALSE, output=FALSE, fig.cap= "Fig. 2: I would write a VERY informative figure caption here that explained EVERY THING about this plot, including any outliers any potential trends I see! "}
+
+## 1 graph for y ~ x (numeric) 
+
+dat %>% 
+  ggplot(aes(y = log_body_mass_g, x = bill_depth_mm)) +
+  geom_point(color = "steelblue2") +
+  theme_classic() + # pretty theme
+  theme(axis.title = element_text(face = "bold"), 
+        axis.text.x = element_text(size = 11)) +
+  labs(x = "x label (units)", y = "y label (units)") +
+  ggtitle("Insert title of plot here") 
+
+## I would double check that my axes include any relevant transformations and units and do not contain spelling errors.
+
+```
+
+```{r warnings=FALSE, fig.show="hold", echo=FALSE, output=FALSE, fig.cap= "Fig. 3: I would write a VERY informative figure caption here that explained EVERY THING about this plot, including any outliers and any potential trends I see! "}
+
+## 1 graph for y ~ x (categorical) 
+
+dat %>% 
+  ggplot(aes(y = log_body_mass_g, x = island)) +
+  geom_boxplot(fill = "steelblue2") +
+  theme_classic() + # pretty theme
+  theme(axis.title = element_text(face = "bold"), 
+        axis.text.x = element_text(size = 11)) +
+  labs(x = "x label (units)", y = "y label (units)") +
+  ggtitle("Insert title of plot here") 
+
+## I would double check that my axes include any relevant transformations and units and do not contain spelling errors.
+
+```
+
+## Statistical Methods
+
+Here, I would explain generally what I did, and then make subsections!
+
+**Example sub sections**
+
+#### Does the log body mass of Adelie penguins vary by island?
+
+or
+
+#### Anova: Comparing the mean log body mass of Adelie penguins among islands
+
+I would CLEARLY state my null and alternative hypotheses using very specific statistical language and my variables, and the test I ran. I would describe what ANOVA is, what all of its assumptions are and how I checked them going into a lot of detail. I would include (or cite in the appendix) all plots made to check assumptions and describe in detail what the plots mean (Fig. 5). I would also include relevant p-values of tests used to check the assumptions of my statistical test, and interpret those p-values (for example, I would describe what a p-value > 0.05 in a levene's test means in terms of meeting the assumptions of the ANOVA, and report my p-value of my levene's test). I would explain each test I use at the level of a reader who has not taken Biometry.
+
+You could even get fancy here if you wanted to with some $latex$ to write out your null and alternative hypotheses, but it isn't required.
+
+```{r warnings=FALSE, fig.show="hold", echo=FALSE, output=FALSE, fig.cap="Fig. 5: I would write a VERY informative figure caption here that explained EVERY THING about this plot and how it is interpreted to assess the assumptions of my test"}
+
+fit1 <- lm(log_body_mass_g ~ island, data=dat)
+par(mfrow=c(2,2))
+plot(fit1, main ="Dianostic plot of ANOVA") 
+par(mfrow=c(1,1))
+
+```
+
+
+#### Is bill depth a good predictor of Adelie penguin log body mass?
+
+or
+
+#### Linear model: Predicting Adelie penguin log body mass from bill depth
+
+Same as above: I would CLEARLY state my null and alternative hypotheses using very specific statistical language and my variables, and the test I ran. I would describe what a linear regression is, what all of its assumptions are and how I checked them going into a lot of detail. I would include (or cite in the appendix) all plots made to check assumptions and describe in detail what the plots mean (Fig. 6). I would also include relevant p-values of tests used to check the assumptions of my statistical test, and interpret those p-values (for example, I would describe what a p-value > 0.05 in a shapiro test of my residuals means in terms of meeting the assumptions of the linear regression, and report my p-value). I would explain each test I use at the level of a reader who has not taken Biometry.
+
+
+Note: I could get super fancy with some $$latex on its own line using double dollar signs $$ showing the equation of my linear model.
+
+```{r warnings=FALSE, fig.show="hold", echo=FALSE, output=FALSE, fig.cap="Fig. 6: I would write a VERY informative figure caption here that explained EVERY THING about this plot and how it is interpreted to assess the assumptions of my test"}
+
+fit2 <- lm(log_body_mass_g ~ bill_depth_mm, data=dat) 
+par(mfrow=c(2,2))
+plot(fit2, main= "Dianostic plot of regression")
+par(mfrow=c(1,1))
+
+```
+
+## Results
+
+Do not include raw R output -- instead, make a table of your results or state them in text!
+
+#### Does the log body mass of Adelie penguins vary by island?
+
+I would provide important results from my test and include the values of my test statistics, p-values, alpha level, and confidence intervals and any other important statistics. I would report all my statistical results like this: I found no significant difference in mean log body mass of Adelie penguins across islands (one-way ANOVA; alpha = 0.05, F-value = 0.003, p-value = 0.997). And then reference Figure 7. I would explicitly state whether or not I reject the null hypothesis in statistical terms: I failed to reject the null hypothesis that the log body mass of Adelie penguins is equal across all islands.
+
+**NOTE: i literally did all my analyses in the appendix and then copied and pasted my favorite plots up here so they show up in the main body!**
+
+```{r warnings=FALSE, fig.show="hold", echo=FALSE, output=FALSE, fig.cap="Fig. 7: I would write a VERY informative figure caption here that explained EVERY THING about this plot, including the trend I found in my analysis"}
+
+ggplot(dat, aes(x=island, y=log_body_mass_g, fill=island, fill=island))+ #base plot
+  geom_boxplot(show.legend=F)+ #do a boxplot, but hide legend cause its just colors
+  scale_fill_manual(values=c("orchid", "lightseagreen", "orange"))+ #set line colors
+  ylab("Adelie Penguin log body mass (g)")+ 
+  xlab("Island")+ 
+  theme_bw()+ #cute theme
+  theme(text = element_text(size=15)) # Larger font
+```
+
+#### Is bill depth a good predictor of Adelie penguin body mass?
+
+Rinse, and repeat but for your second test: I would provide important results from my test and include the values of my test statistics, p-values, alpha level, and confidence intervals and any other important statistics for this test. I would report my statistical results as above (linear regression; alpha = xxx, p-value = xxx) and include and interpret my b0, b1, and R-squared as we learned in labs 7 and 8 (and reference the plot below). I would explicitly state whether or not I reject the null hypothesis in statistical terms
+
+```{r warnings=FALSE, fig.show="hold", echo=FALSE, output=FALSE, fig.cap=" Fig. 8: would write a VERY informative figure caption here that explained EVERY THING about this plot, including the trend I found in my analysis"}
+
+ggplot(dat, aes(x=bill_depth_mm, y=log_body_mass_g))+
+  geom_point(size=3)+
+  geom_smooth(method="lm", alpha=0.6, size=0.5)+
+  ylab("Adelie Penguin Log body mass (g)")+ 
+  xlab("Adelie Penguin Bill depth (mm)")+
+  theme_bw()+ #cute theme
+  theme(text = element_text(size=12)) 
+
+```
+
+## Discussion
+
+Here, I would wrap up everything and explain the biological significance based on my statistical results. What do your results mean in real-world terms? What are the limitations of your analysis? Are there possible sources of bias or dependence? If given more time and more data, what would you choose to analyze? What is the final take-away?
+
+I would make sure to include all of the following in my discussion: 
+
+● what does the result from Test 1 mean in terms of your question? 
+
+● what does the result from Test 2 mean in terms of your question?
+
+● what does the result from Test 1 and Test 2 mean about the biology of your system? 
+
+● what are potential limitations of your system? ● how would you improve this study?
+
+## References
+
+Include citations for any papers you reference, for the data, and for all packages you use (hint: in R/RStudio, try citation("packagename")!). You may use any scientifically accepted citation format.
+
+*Note: at minimum, make sure to cite 2-3 journal papers, packages used, and your dataset*
+
+## Appendix
+
+### All code goes here!!! Do NOT forget to annotate do not include long printouts of entire datasets - the code is worth a lot of your grade!
+
+### Section 1: Exploratory data analysis
+
+```{r}
+# Include all data cleaning code you used to get your clean version that you read in in the beginning of the final project.
+
+## See the final project check in template for example cleaning code
+
+## Here, I only care about Adelie penguins, because they are the only penguins found across multiple islands in this dataset, and I am interested in the differences across islands!
+dat<- penguins
+dat <- subset(dat, species=="Adelie")
+
+# Now, I want to remove all rows where we have missing data:DO NOT DO THIS FOR YOUR DATA!! JUST FOR THE PENGUINS DATA!
+dat <- dat %>% filter(complete.cases(.)) 
+
+#general data checking
+head(dat)
+summary(dat)
+
+#check numeric vars for distributions and normality
+## histograms
+par(mfrow=c(2,2))
+hist(dat$bill_length_mm)
+hist(dat$bill_depth_mm)
+hist(dat$flipper_length_mm)
+hist(dat$body_mass_g)
+par(mfrow=c(1,1))
+
+## qqPlots
+par(mfrow=c(2,2))
+qqPlot(dat$bill_length_mm)
+qqPlot(dat$bill_depth_mm)
+qqPlot(dat$flipper_length_mm)
+qqPlot(dat$body_mass_g)
+par(mfrow=c(1,1))
+
+## shapiro tests
+shapiro.test(dat$bill_length_mm) # normal
+shapiro.test(dat$bill_depth_mm) # normal
+shapiro.test(dat$flipper_length_mm) # normal
+shapiro.test(dat$body_mass_g) # not
+
+# Scientifically, I am most interested in body mass, so I will focus on making that normal!
+## Transformations of variables of interest
+dat$log_body_mass_g <- log(dat$body_mass_g) 
+hist(dat$log_body_mass_g, main="", xlab="log body mass (g)")
+qqPlot(dat$body_mass_g)
+shapiro.test(dat$log_body_mass_g) #normal
+
+#prep for pairs panels: only numeric vars
+numerics <- dat[,c("log_body_mass_g", "bill_depth_mm", "flipper_length_mm", "bill_length_mm")]
+pairs.panels(numerics) #include as a fig
+
+# numeric ~ categorical exploration
+## Here are plots of all of my potentially interesting numeric~categorical comparisons I may want to make - I am interested in the body mass of Adelie
+boxplot(log_body_mass_g ~ island, data=dat)
+boxplot(log_body_mass_g ~ sex, data=dat)
+boxplot(log_body_mass_g  ~ year, data=dat)
+
+
+# I would annotate my EDA in comments, here is an example
+
+#based on all this, here are my findings:
+
+# y~x numerical notes: 
+
+# comment on the normality of the numeric variables
+# comment on the relationship between my variables of interest
+# can also comment on my variables not of interest if I want
+
+# y~x categorical notes: 
+
+# I am interested in how the body mass of Adelie penguins changes across islands
+
+#so, i think i will run an anova on Adelie body mass ~ island for my "comparing means" test
+
+# I am interested in the body mass of Adelie penguins and whether it can be predicted by the beak depth, or perhaps if it can be predicted by island
+
+#and run a linear model (an ANCOVA specifically) to see what variables are most predictive of body mass for my "predictive" test
+
+```
+
+### Section 2: Statistical methods
+
+#### ANOVA
+
+```{r}
+
+#goal: one way anova of Adelie log body mass by island
+
+#step 1: check assumptions of anova
+#indep data? probs
+#normality
+#equal variance
+
+#check for normality 
+fit1 <- lm(log_body_mass_g ~ island, data=dat)
+par(mfrow=c(2,2))
+plot(fit1) 
+par(mfrow=c(1,1))
+
+res1 <- fit1$residuals
+shapiro.test(res1)
+qqPlot(res1)
+hist(res1) 
+
+#variance? 
+leveneTest(log_body_mass_g ~ island, data=dat)
+#woohoo!
+
+#all assumptions are met, time for the anova
+
+
+#step 2: run the anova
+
+adelie.aov <- aov(log_body_mass_g ~ island, data=dat)
+summary(adelie.aov) # island is not significant, but that's okay! null results are results!
+
+#step 3: make a nice ggplot figure to summarize these results, include as a fig in main text!
+
+ggplot(dat, aes(x=island, y=log_body_mass_g, fill=island, fill=island))+ #base plot
+  geom_boxplot(show.legend=F)+ #do a boxplot, but hide legend cause its just colors
+  scale_fill_manual(values=c("orchid", "lightseagreen", "orange"))+ #set line colors
+  ylab("Adelie Penguin log body mass (g)")+ 
+  xlab("Island")+ 
+  theme_bw()+ #cute theme
+  theme(text = element_text(size=15)) # Larger font
+
+```
+
+#### Linear regression
+
+```{r}
+
+#goal: predict log body mass by bill depth
+
+#step 1: check assumptions of linear regression
+#indep? i hope so
+#normal residuals?
+#equal variances?
+
+fit2 <- lm(log_body_mass_g ~ bill_depth_mm, data=dat) 
+par(mfrow=c(2,2))
+plot(fit2) #looks homoskedastic to me
+par(mfrow=c(1,1))
+
+# check resids
+res2 <- fit2$residuals
+qqPlot(res2) #normal
+shapiro.test(res2) #yep its normal
+#variance? 
+
+#step 2: run the lm
+
+summary(fit2) #Bill depth is a significant predictor
+
+#step 3: make a pretty graph to summarize findings
+
+ggplot(dat, aes(x=bill_depth_mm, y=log_body_mass_g))+
+  geom_point(size=3)+
+  geom_smooth(method="lm", alpha=0.6, size=0.5)+
+  ylab("Adelie Penguin Log body mass (g)")+ 
+  xlab("Adelie Penguin Bill depth (mm)")+
+  theme_bw()+ #cute theme
+  theme(text = element_text(size=12)) 
+
+```
