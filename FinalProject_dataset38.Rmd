@@ -14,6 +14,7 @@ knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE)
 
 ```{r data and libraries, include=FALSE}
 # upload necessary libraries
+library(readr) # package for reading in data
 library(tidyverse)
 library(ggplot2)
 #install.packages("psych")
@@ -21,22 +22,30 @@ library(psych)
 library(car)
 library(multcomp)
 library(cowplot)
+library(tidyr)
 
 #install.packages("palmerpenguins")
 library(palmerpenguins) # for this example data
+library(dplyr)
+
 
 # include other libraries you may need
 
 #load in your cleaned data
 dataset_38 <- read.csv("data/dataset_38.csv")
 
+#str(dataset_38)
+
 
 ```
 
 ```{r}
+
 clean_data <- dataset_38 %>%
-  select(treat,SM,pH, block) %>%   # keep only relevant columns
-  drop_na() # remove all rows with NAs
+  dplyr::select(treat,SM,pH, block) %>%   # keep only relevant columns
+  tidyr::drop_na() # remove all rows with NAs
+
+
 ```
 
 
@@ -247,38 +256,68 @@ Include citations for any papers you reference, for the data, and for all packag
 ## See the final project check in template for example cleaning code
 
 ## Here, I only care about Adelie penguins, because they are the only penguins found across multiple islands in this dataset, and I am interested in the differences across islands!
-dat<- penguins
-dat <- subset(dat, species=="Adelie")
 
-# Now, I want to remove all rows where we have missing data:DO NOT DO THIS FOR YOUR DATA!! JUST FOR THE PENGUINS DATA!
-dat <- dat %>% filter(complete.cases(.)) 
+clean_data <- dataset_38 %>%
+  dplyr::select(treat,SM,pH, block) %>%   # keep only relevant columns
+  tidyr::drop_na() # remove all rows with NAs
+
 
 #general data checking
-head(dat)
-summary(dat)
+head(clean_data)
+summary(clean_data)
+```
+
+
+
+
+
+```{r}
 
 #check numeric vars for distributions and normality
 ## histograms
 par(mfrow=c(2,2))
-hist(dat$bill_length_mm)
-hist(dat$bill_depth_mm)
-hist(dat$flipper_length_mm)
-hist(dat$body_mass_g)
+
+#clean_data <- as.factor(clean_data$treat)
+
+
+#hist(clean_data$treat)
+hist(clean_data$SM)
+hist(clean_data$pH)
+hist(clean_data$block)
 par(mfrow=c(1,1))
 
+
+
+```
+
+
+
+
+```{r}
 ## qqPlots
 par(mfrow=c(2,2))
-qqPlot(dat$bill_length_mm)
-qqPlot(dat$bill_depth_mm)
-qqPlot(dat$flipper_length_mm)
-qqPlot(dat$body_mass_g)
+qqPlot(clean_data$SM)
+qqPlot(clean_data$pH)
+qqPlot(clean_data$block)
 par(mfrow=c(1,1))
 
+
+```
+
+
+```{r}
 ## shapiro tests
-shapiro.test(dat$bill_length_mm) # normal
-shapiro.test(dat$bill_depth_mm) # normal
-shapiro.test(dat$flipper_length_mm) # normal
-shapiro.test(dat$body_mass_g) # not
+shapiro.test(clean_data$SM) # not
+shapiro.test(clean_data$pH) # normal
+shapiro.test(clean_data$block) # not
+
+
+```
+
+
+
+
+```{r}
 
 # Scientifically, I am most interested in body mass, so I will focus on making that normal!
 ## Transformations of variables of interest
