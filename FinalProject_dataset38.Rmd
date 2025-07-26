@@ -441,6 +441,6 @@ ggplot(dat, aes(x=bill_depth_mm, y=log_body_mass_g))+
   ylab("Adelie Penguin Log body mass (g)")+ 
   xlab("Adelie Penguin Bill depth (mm)")+
   theme_bw()+ #cute theme
-  theme(text = element_text(size=12)) 
+  theme(text = element_text(size=12)) #
 
 ```
