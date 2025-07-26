@@ -1,0 +1,113 @@
+---
+title: "Final Project - Dataset 38"
+author: "Your Name"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+### Section 1: Exploratory Data Analysis
+```{r libraries}
+library(tidyverse)
+library(car)
+library(psych)
+```
+
+```{r load_data}
+dataset_38 <- read.csv("data/dataset_38.csv")
+
+clean_data <- dataset_38 %>%
+  dplyr::select(treat,SM,pH, block) %>%   # keep only relevant columns
+  tidyr::drop_na() # remove all rows with NAs
+
+clean_data$block <- as.factor(clean_data$block)
+
+summary(clean_data)
+head(clean_data)
+```
+
+```{r eda_plots}
+# Histograms
+par(mfrow=c(2,2))
+hist(clean_data$SM, main="Soil Moisture")
+hist(clean_data$pH, main="Soil pH")
+hist(as.numeric(clean_data$block), main="Block")
+par(mfrow=c(1,1))
+
+# Pairs plot
+pairs.panels(clean_data[, c("SM", "pH")])
+```
+
+### Section 2: Checking Normality
+```{r normality_tests}
+shapiro.test(clean_data$SM)
+shapiro.test(clean_data$pH)
+
+clean_data$SM_log <- log(clean_data$SM)
+shapiro.test(clean_data$SM_log)
+
+qqPlot(clean_data$SM_log, main="QQ Plot for log(SM)")
+qqPlot(clean_data$pH, main="QQ Plot for pH")
+```
+
+### Section 3: Visualizing Group Differences
+```{r boxplots}
+boxplot(SM_log ~ treat, data=clean_data, main="Log(SM) by Treatment")
+boxplot(pH ~ treat, data=clean_data, main="pH by Treatment")
+```
+
+### Section 4: Statistical Methods
+```{r statistical_tests}
+# ANOVA
+aov_SM_log <- aov(SM_log ~ treat, data=clean_data)
+summary(aov_SM_log)
+
+aov_pH <- aov(pH ~ treat, data=clean_data)
+summary(aov_pH)
+
+# Linear Models
+lm_SM <- lm(SM_log ~ treat + block, data=clean_data)
+summary(lm_SM)
+
+lm_pH <- lm(pH ~ treat + block, data=clean_data)
+summary(lm_pH)
+```
+
+```{r diagnostics}
+# Diagnostic plots
+par(mfrow=c(2,2))
+plot(lm_SM)
+plot(lm_pH)
+par(mfrow=c(1,1))
+```
+
+### Section 5: Interpretation and Results
+```
+#### Hypotheses:
+**ANOVA for pH:**
+- H₀: Mean pH is equal across all treatment groups.
+- H₁: At least one treatment group has a different mean pH.
+
+**ANOVA for log(SM):**
+- H₀: Mean log(SM) is equal across treatments.
+- H₁: At least one treatment differs in mean log(SM).
+
+**Linear Model for pH:**
+- H₀: Treatment and block do not predict pH.
+- H₁: Treatment and/or block significantly predict pH.
+
+**Linear Model for log(SM):**
+- H₀: Treatment and block do not predict log(SM).
+- H₁: Treatment and/or block significantly predict log(SM).
+
+#### Results Summary:
+- Report F-values, p-values, and whether null hypotheses were rejected.
+- Provide biological interpretation (e.g., "Grazing significantly reduced pH compared to Enclosure").
+- Highlight patterns or outliers if applicable.
+
+#### Conclusion:
+- Summarize findings concisely
+- Discuss limitations (e.g., small sample size)
+- Suggest further steps (e.g., additional sampling or repeated measures)
