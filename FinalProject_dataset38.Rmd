@@ -87,24 +87,6 @@ Check out the R code below in the header of the code chunk to see how I got thes
 
 ```{r warnings=FALSE, fig.show="hold", echo=FALSE, output=FALSE, fig.cap= "Fig. 1: I would write a VERY informative figure caption here that explained EVERY THING about this plot! I would describe the distribution of y in terms we have used in Lab 2 - 3 and throughout course material "}
 
-## 1 graph for the distribution of y (1st numeric)
-
-# For funsies, let's include both a histogram and a qqplot in one chunk using pairs.panels, knowing that only one 1 graph for the distribution of y (1st numeric) is required.
-
-par(mfrow=c(1,2)) #include as one fig
-
-# y variable distribution
-
-# add a log transformed column
-dat <- dat %>% 
-  mutate(log_body_mass_g = log(body_mass_g))
-
-# plot it
-hist(dat$log_body_mass_g, main = "Main label for hist of y var", xlab="label (units)") # note: could also do a ggplot version of histogram instead
-qqPlot(dat$log_body_mass_g, main = "Main label for qqplot of y var", ylab="label")
-## I would double check that my axes include any relevant transformations and units and do not contain spelling errors. 
-
-par(mfrow=c(1,1))
 
 ```
 
@@ -112,14 +94,7 @@ par(mfrow=c(1,1))
 
 ## 1 graph for y ~ x (numeric) 
 
-dat %>% 
-  ggplot(aes(y = log_body_mass_g, x = bill_depth_mm)) +
-  geom_point(color = "steelblue2") +
-  theme_classic() + # pretty theme
-  theme(axis.title = element_text(face = "bold"), 
-        axis.text.x = element_text(size = 11)) +
-  labs(x = "x label (units)", y = "y label (units)") +
-  ggtitle("Insert title of plot here") 
+
 
 ## I would double check that my axes include any relevant transformations and units and do not contain spelling errors.
 
@@ -129,14 +104,7 @@ dat %>%
 
 ## 1 graph for y ~ x (categorical) 
 
-dat %>% 
-  ggplot(aes(y = log_body_mass_g, x = island)) +
-  geom_boxplot(fill = "steelblue2") +
-  theme_classic() + # pretty theme
-  theme(axis.title = element_text(face = "bold"), 
-        axis.text.x = element_text(size = 11)) +
-  labs(x = "x label (units)", y = "y label (units)") +
-  ggtitle("Insert title of plot here") 
+
 
 ## I would double check that my axes include any relevant transformations and units and do not contain spelling errors.
 
@@ -160,10 +128,7 @@ You could even get fancy here if you wanted to with some $latex$ to write out yo
 
 ```{r warnings=FALSE, fig.show="hold", echo=FALSE, output=FALSE, fig.cap="Fig. 5: I would write a VERY informative figure caption here that explained EVERY THING about this plot and how it is interpreted to assess the assumptions of my test"}
 
-fit1 <- lm(log_body_mass_g ~ island, data=dat)
-par(mfrow=c(2,2))
-plot(fit1, main ="Dianostic plot of ANOVA") 
-par(mfrow=c(1,1))
+
 
 ```
 
@@ -181,10 +146,7 @@ Note: I could get super fancy with some $$latex on its own line using double dol
 
 ```{r warnings=FALSE, fig.show="hold", echo=FALSE, output=FALSE, fig.cap="Fig. 6: I would write a VERY informative figure caption here that explained EVERY THING about this plot and how it is interpreted to assess the assumptions of my test"}
 
-fit2 <- lm(log_body_mass_g ~ bill_depth_mm, data=dat) 
-par(mfrow=c(2,2))
-plot(fit2, main= "Dianostic plot of regression")
-par(mfrow=c(1,1))
+
 
 ```
 
@@ -200,13 +162,7 @@ I would provide important results from my test and include the values of my test
 
 ```{r warnings=FALSE, fig.show="hold", echo=FALSE, output=FALSE, fig.cap="Fig. 7: I would write a VERY informative figure caption here that explained EVERY THING about this plot, including the trend I found in my analysis"}
 
-ggplot(dat, aes(x=island, y=log_body_mass_g, fill=island, fill=island))+ #base plot
-  geom_boxplot(show.legend=F)+ #do a boxplot, but hide legend cause its just colors
-  scale_fill_manual(values=c("orchid", "lightseagreen", "orange"))+ #set line colors
-  ylab("Adelie Penguin log body mass (g)")+ 
-  xlab("Island")+ 
-  theme_bw()+ #cute theme
-  theme(text = element_text(size=15)) # Larger font
+
 ```
 
 #### Is bill depth a good predictor of Adelie penguin body mass?
@@ -215,13 +171,7 @@ Rinse, and repeat but for your second test: I would provide important results fr
 
 ```{r warnings=FALSE, fig.show="hold", echo=FALSE, output=FALSE, fig.cap=" Fig. 8: would write a VERY informative figure caption here that explained EVERY THING about this plot, including the trend I found in my analysis"}
 
-ggplot(dat, aes(x=bill_depth_mm, y=log_body_mass_g))+
-  geom_point(size=3)+
-  geom_smooth(method="lm", alpha=0.6, size=0.5)+
-  ylab("Adelie Penguin Log body mass (g)")+ 
-  xlab("Adelie Penguin Bill depth (mm)")+
-  theme_bw()+ #cute theme
-  theme(text = element_text(size=12)) 
+
 
 ```
 
@@ -385,8 +335,18 @@ hist(res1)
 #run anova of SM_log
 anova(fit1)
 
+leveneTest(SM_log ~ treat, data=clean_data)
 
 boxplot(SM_log ~ treat, data = clean_data, main = "Soil Moisture by Treatment", ylab = "log(SM)")
+
+ggplot(clean_data, aes(x=treat, y=SM_log, fill=treat, fill=treat))+ #base plot
+  geom_boxplot(show.legend=F)+ #do a boxplot, but hide legend cause its just colors
+  scale_fill_manual(values=c("orchid", "lightseagreen", "orange"))+ #set line colors
+  ylab("log(SM)")+ 
+  xlab("Soil Moisture by Treatment")+ 
+  theme_bw()+ #cute theme
+  theme(text = element_text(size=15)) # Larger font
+
 
 ```
 
@@ -394,7 +354,7 @@ boxplot(SM_log ~ treat, data = clean_data, main = "Soil Moisture by Treatment", 
 
 
 ```{r}
-#check for normality 
+#check for normalityfor pH and Treat
 fit2 <- lm(pH ~ treat, data=clean_data)
 par(mfrow=c(2,2))
 plot(fit2) 
@@ -407,87 +367,63 @@ qqPlot(res2)
 hist(res2) 
 
 
-```
+#run anova of pH
+anova(fit2)
+
+leveneTest(pH ~ treat, data=clean_data)
+
+boxplot(pH ~ treat, data = clean_data, main = "Soil Moisture by Treatment", ylab = "log(SM)")
 
 
-```{r}
-
-#goal: one way anova of Adelie log body mass by island
-
-#step 1: check assumptions of anova
-#indep data? probs
-#normality
-#equal variance
-
-#check for normality 
-fit1 <- lm(log_body_mass_g ~ island, data=clean_data)
-par(mfrow=c(2,2))
-plot(fit1) 
-par(mfrow=c(1,1))
-
-res1 <- fit1$residuals
-shapiro.test(res1)
-qqPlot(res1)
-hist(res1) 
-
-#variance? 
-leveneTest(log_body_mass_g ~ island, data=dat)
-#woohoo!
-
-#all assumptions are met, time for the anova
-
-
-#step 2: run the anova
-
-adelie.aov <- aov(log_body_mass_g ~ island, data=dat)
-summary(adelie.aov) # island is not significant, but that's okay! null results are results!
-
-#step 3: make a nice ggplot figure to summarize these results, include as a fig in main text!
-
-ggplot(dat, aes(x=island, y=log_body_mass_g, fill=island, fill=island))+ #base plot
+ggplot(clean_data, aes(x=treat, y=pH, fill=treat, fill=treat))+ #base plot
   geom_boxplot(show.legend=F)+ #do a boxplot, but hide legend cause its just colors
   scale_fill_manual(values=c("orchid", "lightseagreen", "orange"))+ #set line colors
-  ylab("Adelie Penguin log body mass (g)")+ 
-  xlab("Island")+ 
+  ylab("pH")+ 
+  xlab("pH by Treatment")+ 
   theme_bw()+ #cute theme
   theme(text = element_text(size=15)) # Larger font
 
 ```
 
+
 #### Linear regression
 
 ```{r}
 
-#goal: predict log body mass by bill depth
-
-#step 1: check assumptions of linear regression
-#indep? i hope so
-#normal residuals?
-#equal variances?
-
-fit2 <- lm(log_body_mass_g ~ bill_depth_mm, data=dat) 
-par(mfrow=c(2,2))
-plot(fit2) #looks homoskedastic to me
-par(mfrow=c(1,1))
-
-# check resids
-res2 <- fit2$residuals
-qqPlot(res2) #normal
-shapiro.test(res2) #yep its normal
-#variance? 
-
-#step 2: run the lm
-
-summary(fit2) #Bill depth is a significant predictor
-
-#step 3: make a pretty graph to summarize findings
-
-ggplot(dat, aes(x=bill_depth_mm, y=log_body_mass_g))+
-  geom_point(size=3)+
-  geom_smooth(method="lm", alpha=0.6, size=0.5)+
-  ylab("Adelie Penguin Log body mass (g)")+ 
-  xlab("Adelie Penguin Bill depth (mm)")+
-  theme_bw()+ #cute theme
-  theme(text = element_text(size=12)) #
+#prep for pairs panels: only numeric vars
+numerics <- clean_data[,c("SM", "pH", "SM_log")]
+pairs.panels(numerics) #include as a fig
 
 ```
+
+
+
+```{r}
+
+
+fit3 <- lm(pH ~ SM_log, data = clean_data)
+par(mfrow=c(2,2))
+plot(fit3) 
+par(mfrow=c(1,1))
+
+
+summary(fit3)
+
+
+# Save residuals and check normality
+res3 <- fit3$residuals
+shapiro.test(res3)
+qqPlot(res3)
+hist(res3)
+
+
+ggplot(clean_data, aes(x = SM_log, y = pH)) +
+  geom_point() +
+  geom_smooth(method = "lm", col = "blue") +
+  theme_bw() +
+  labs(x = "log(Soil Moisture)", y = "pH", title = "Regression: pH ~ log(SM)")
+
+
+```
+
+
