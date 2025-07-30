@@ -1,11 +1,10 @@
 ---
-title: "EEMB 146 Final Report: Example with Palmer Penguin Data (change this to your own title- puns encouraged!)"
-author: "Caitlin Nordheim-Maestas, adapted from Tatum Katz & Kacie Ring"
+title: "EEMB 146 Final Report: Down to the Root: Digging into Soil pH and Moisture in Managed Grasslands"
+author: "Linh Dang"
 date: "today"
 output: html_document
 ---
 
-**This is a merely a template or the "bare bones" of what your final report should look like. Pay attention to the document format and figure labels within {r} and go back to the final project instructions document for all of the requirements!**
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE)
@@ -33,10 +32,6 @@ dataset_38 <- read.csv("data/dataset_38.csv")
 #str(dataset_38)
 
 
-```
-
-
-```{r}
 #filter observations
 clean_data <- dataset_38 %>%
   dplyr::select(treat,SM,pH, block) %>%   # keep only relevant columns
@@ -44,109 +39,182 @@ clean_data <- dataset_38 %>%
 
 #change block as factor
 clean_data$block <- as.factor(clean_data$block)
+
+
 ```
 
 
 
 ## Abstract
 
-Here, I would write an abstract of this data analysis project. I would include a sentence each describing my motivation, the nature of the data, a rough explanation of my method, my result(s), and broad conclusions. (suggested length: 4-5 sentences).
+This project investigates how land management practices influence soil pH and whether soil moisture serves as a predictor of pH in a temperate grassland ecosystem. The dataset includes measurements of soil pH and soil moisture under three treatments: Enclosure, Grazing, and Mowing. We conducted a one-way ANOVA to assess differences in soil pH across treatments and used linear regression to test whether log-transformed soil moisture predicts pH. The ANOVA revealed no significant differences in soil pH among treatments. However, the regression analysis showed a significant negative relationship between soil moisture and pH. These findings suggest that while treatment type may not directly affect soil pH, changes in soil moisture associated with land use can influence soil acidity.
 
 ## Introduction
 
-This dataset comes from a field study investigating the effects of different land-use treatments—grazing, mowing, and enclosure—on grassland productivity and biodiversity in Inner Mongolia. The data were collected by Wang and colleagues during ecological field surveys in mid-August 2017, and published on November 20, 2019, with the aim of informing sustainable grassland management and biodiversity conservation strategies.
+Grasslands are critical ecosystems that provide habitat, support biodiversity, and regulate key ecological processes like nutrient cycling and soil health. Human land-use practices such as grazing and mowing can alter soil conditions, potentially affecting ecosystem function and long-term sustainability (Bardgett et al., 2001; Wang et al., 2019). Understanding how different land management strategies influence soil chemistry, particularly soil pH, is essential because pH affects nutrient availability, microbial activity, and plant growth.
 
+This project uses data from a field study conducted by Wang et al. (2019) in the temperate grasslands of Inner Mongolia, China. The study examined how three land-use treatments—Enclosure, Grazing, and Mowing—affect soil properties. Data were collected in August 2017 and include variables such as soil pH, soil moisture (SM), and treatment type. After filtering, the cleaned dataset used here includes 30 observations and 5 variables.
 
-Here, I would introduce the biological problem and give a general overview of my dataset, explaining what my data are and how they were collected. I would include where the data came from (database/paper/group) and cite it in this section. I would also include who collected the data, how many observations are in my (clean) dataset, and how many variables are in my (clean) dataset. I would also talk about my research questions, and why they are interesting and important. I would include background information about the biological system and make sure I cite 2-3 papers when discussing the biology.
+My primary research question is: Does land-use treatment influence soil pH? I used a one-way ANOVA with pH as the response variable and treatment as the predictor.
 
-I would state my first goal/research question here (statistical question 1), for example, I aim to investigate whether there is difference in the body mass of Adelie penguins across islands. I would write my first hypothesis here **very** clearly, making sure to clearly specify what exactly my variables are. For example, I hypothesize that the body mass of Adelie penguins is the same across all islands. I would state my second goal/research question here (statistical question 2), for example, I aim to investigate whether the Adelie penguin body mass can be predicted by bill depth. I would write my second hypothesis here **very** clearly too. For example, I hypothesize that Adelie penguin body mass can be predicted by bill depth. (suggested length: ½ - 1 page)
+Null hypothesis (H₀): Mean pH is equal across all three treatments (Enclosure, Grazing, Mowing).
 
-*Note: I would review the final project instructions to ensure I included all of the elements of the introduction required*
+Alternative hypothesis (H₁): At least one treatment group has a different mean pH.
 
-*Note: I would also review the statistical hypotheses for each test in the labs and my lecture notes to ensure I am using the correct hypothesis for the test I am running.*
+My second question asks: Does soil moisture predict soil pH? I used a linear regression with pH as the response and log-transformed soil moisture (SM_log) as the predictor.
+
+Null hypothesis (H₀): There is no relationship between SM_log and pH (slope = 0).
+
+Alternative hypothesis (H₁): There is a relationship between SM_log and pH (slope ≠ 0).
+
+These questions matter because soil pH is a key indicator of soil health. If management practices significantly alter pH, they may affect plant communities, microbial processes, and overall ecosystem function. By analyzing how pH responds to treatment and moisture, we can better inform sustainable grassland management.
 
 ## Exploratory Data Analysis
 
-In plain text: Describe your data, explain if/how you transformed your data, and why you chose the plots you used.
+The dataset used in this project was cleaned by removing rows with missing values, resulting in 30 observations and 5 variables. I created a new variable, SM_log, by applying a natural log transformation to soil moisture (SM) to improve normality and meet the assumptions of parametric tests like ANOVA and linear regression (see Appendix section 1 for code). This transformation was chosen because the original soil moisture data were right-skewed.
 
-First, I would describe any data cleaning that I did to my data set, including removing NA's, any subsetting, and how new columns or variables were created (or any other data cleaning done). I would give biological explanations for why I subsetted my data if I did. For example, I chose to only include Adelie penguins because they were the only species surveyed across multiple islands, and I am most interested in comparisons across islands. I would include all data cleaning code in the appendix, and cite it here (Appendix section 1).
+To explore the data, I first examined the distribution of the response variable, soil pH. As shown in Figure 1, the histogram suggests that pH is approximately normally distributed with no extreme outliers. In Figure 2, a scatterplot of pH versus log-transformed soil moisture reveals a negative trend, indicating that soil pH tends to decrease as soil moisture increases. Lastly, Figure 3 displays boxplots of pH across the three land-use treatments (Enclosure, Grazing, Mowing), showing some variation but no strong differences in central tendency among the groups.
 
-Next, I would describe the data transformations that I used, being very specific about why and how I transformed it. For example, in this data, the body mass of Adelie penguins was not normal, so I would say the untransformed body mass of Adelie penguins was not normally distributed (and describe in detail how I know it is not normal using terms we have used in Lab 2 - 3 and throughout course material), and that I chose to do a log-transformation to make the data normal, and explain in detail how I know it is normal now. I would include all of the code to back that up in the appendix and cite it here like this (Appendix section 2). I would also state whether there were outliers in my final dataset, and if there are, how I handled them.
+These exploratory plots helped guide the selection of appropriate statistical tests and supported the assumptions required for valid inference.
 
-Next, I would interpret the three plots below in full sentences and describe the trends that I see and in a paragraph here, referencing each figure in the EDA in the text. I would include sentence(s) interpreting the graph for the distribution of y (Fig. 1). I would include sentence(s) interpreting my graph for y \~ x (numeric) (Fig. 2). I would include sentence(s) interpreting my graph for y \~ x (categorical) (Fig. 3).
 
-In chunks: Visualize your data in a meaningful way (boxplots, scatterplots, histograms, pair.panels)
+# 1. Distribution of of pH (response variable)
 
-**Note**: you don't need ALL of these up here in the main report, pick the visualizations that best represent your data and leave the rest in the appendix
+```{r warnings=FALSE, fig.show="hold", echo=FALSE, output=FALSE, fig.cap= "Fig. 1: Histogram and Q-Q plot of soil pH. The histogram shows a fairly symmetric distribution centered around pH 8.0, with most values between 7.9 and 8.2. The Q-Q plot shows points closely following the normal line, indicating approximate normality. The Shapiro-Wilk test supports this with a high p-value (p = 0.6869), suggesting that the data do not significantly deviate from a normal distribution. Therefore, using parametric tests like ANOVA or linear regression with pH is appropriate."}
 
-**Note**: use par(mfrow=c(2,2)) to put multiple figures under one chunk
+par(mfrow=c(1,2))
+hist(clean_data$pH, main = "Histogram of Soil pH", xlab = "pH") #Histogram of Soil pH
+qqPlot(clean_data$pH, main = "qqPlot of Soil pH") #qqPlot of Soil pH
+par(mfrow=c(1,1))
 
-*Note: I would review the rubric in the final project instructions to ensure I included all of the elements of the EDA required, including 1 graph for the distribution of y (1st numeric), 1 graph for y \~ x (numeric), 1 graph for y \~ x (1st categorical), describe the distribution of y in terms we have used in Lab 2 - 3 and throughout course material, explicitly mention if there are outliers or not.*
-
-Check out the R code below in the header of the code chunk to see how I got these figures to show up where I wanted them to with the figure caption directly below!
-
-```{r warnings=FALSE, fig.show="hold", echo=FALSE, output=FALSE, fig.cap= "Fig. 1: I would write a VERY informative figure caption here that explained EVERY THING about this plot! I would describe the distribution of y in terms we have used in Lab 2 - 3 and throughout course material "}
+#Shapiro test of Soil pH
+shapiro.test(clean_data$pH)
 
 
 ```
 
-```{r warnings=FALSE, fig.show="hold", echo=FALSE, output=FALSE, fig.cap= "Fig. 2: I would write a VERY informative figure caption here that explained EVERY THING about this plot, including any outliers any potential trends I see! "}
+Summary:
+
+We examined the distribution of soil pH using a histogram, Q-Q plot, and Shapiro-Wilk test. The histogram shows a roughly symmetric distribution centered around pH 8.0. The Q-Q plot indicates the data closely follow a normal distribution. The Shapiro-Wilk test gave W = 0.9745 with p = 0.6869, which is greater than 0.05. This means the distribution of pH is not significantly different from normal. There are no major outliers visible in the histogram or Q-Q plot.
+
+
+# 2. Relationship between SM_log and pH (numeric ~ numeric)
+
+```{r warnings=FALSE, fig.show="hold", echo=FALSE, output=FALSE, fig.cap= "Fig. 2: Scatterplot of soil pH (response variable) against log-transformed soil moisture (log(SM)). Each point represents one soil sample. The plot shows a moderate negative trend — as log(SM) increases, soil pH tends to decrease. No extreme outliers are visible."}
 
 ## 1 graph for y ~ x (numeric) 
 
-
-
-## I would double check that my axes include any relevant transformations and units and do not contain spelling errors.
+clean_data %>% 
+  ggplot(aes(x = log(SM), y = pH)) +  # map Soil Moisture to x and pH to y
+  geom_point(color = "black", alpha = 0.7) +  # scatterplot points
+  geom_smooth(method = "lm", color = "blue") +  # linear regression line
+  theme_classic() +  # clean background
+  labs(x = "log(Soil Moisture)", y = "Soil pH") +  # axis labels
+  ggtitle("Scatterplot of Soil pH vs. log(Soil Moisture)") +  # title
+  theme(
+    axis.title = element_text(size = 14, face = "bold"),  # axis title style
+    axis.text = element_text(size = 12)  # axis tick label size
+  )
 
 ```
 
-```{r warnings=FALSE, fig.show="hold", echo=FALSE, output=FALSE, fig.cap= "Fig. 3: I would write a VERY informative figure caption here that explained EVERY THING about this plot, including any outliers and any potential trends I see! "}
+
+
+
+Summary:
+We explored the relationship between soil pH (response) and log-transformed soil moisture (log(SM)) using a scatterplot with a fitted regression line. The plot shows a moderate negative trend: as log(SM) increases, soil pH generally decreases. This pattern is consistent with our hypothesis that soil moisture may influence soil pH. No major outliers are visible in the scatterplot.
+
+
+# 3. Relationship between pH and treat (numeric ~ categorical)
+
+```{r warnings=FALSE, fig.show="hold", echo=FALSE, output=FALSE, fig.cap= "Fig. 3: Boxplot of soil pH across land-use treatments (Enclosure, Grazing, Mowing). Each box shows the median, interquartile range (IQR), and potential outliers.Grazing sites show slightly higher pH variability, while Enclosure and Mowing appear more concentrated.A few mild outliers are visible, especially in the Mowing group."}
 
 ## 1 graph for y ~ x (categorical) 
 
+clean_data %>% 
+  ggplot(aes(y = pH, x = treat)) +
+  geom_boxplot(fill = "steelblue2") +
+  theme_classic() + # pretty theme
+  theme(axis.title = element_text(face = "bold"), 
+        axis.text.x = element_text(size = 11)) +
+  labs(x = "Land-use Treatment", y = "Soil pH") +
+  ggtitle("Soil pH Across Land-use Treatments") 
 
-
-## I would double check that my axes include any relevant transformations and units and do not contain spelling errors.
 
 ```
+
+
+
+Summary:
+We examined how soil pH varies across three land-use treatments using a boxplot. The Enclosure and Mowing groups show narrower interquartile ranges compared to Grazing. Grazing appears to have a slightly higher median and more spread. A few mild outliers are visible, particularly in the Mowing group. This plot helps visualize variation in the response variable (pH) across treatments before formal testing.
+
 
 ## Statistical Methods
 
 Here, I would explain generally what I did, and then make subsections!
 
-**Example sub sections**
 
-#### Does the log body mass of Adelie penguins vary by island?
+#### Anova: : Comparing the Mean Soil pH Across Treatments
 
-or
+To determine whether soil pH varies across treatments (Enclosure, Grazing, and Mowing), I used a one-way ANOVA.
 
-#### Anova: Comparing the mean log body mass of Adelie penguins among islands
+Hypotheses:
+Null hypothesis ($H_0$): The mean soil pH is the same across all treatments.
 
-I would CLEARLY state my null and alternative hypotheses using very specific statistical language and my variables, and the test I ran. I would describe what ANOVA is, what all of its assumptions are and how I checked them going into a lot of detail. I would include (or cite in the appendix) all plots made to check assumptions and describe in detail what the plots mean (Fig. 5). I would also include relevant p-values of tests used to check the assumptions of my statistical test, and interpret those p-values (for example, I would describe what a p-value > 0.05 in a levene's test means in terms of meeting the assumptions of the ANOVA, and report my p-value of my levene's test). I would explain each test I use at the level of a reader who has not taken Biometry.
+Alternative hypothesis ($H_A$): At least one treatment has a different mean soil pH.
 
-You could even get fancy here if you wanted to with some $latex$ to write out your null and alternative hypotheses, but it isn't required.
+Checking Assumptions
+Normality of residuals:
+The Shapiro-Wilk test showed that residuals were approximately normal ($W = 0.983$, $p-value = 0.898$), so the normality assumption is met.
+The Q-Q plot and histogram (Figure 5) also visually confirm normality.
 
-```{r warnings=FALSE, fig.show="hold", echo=FALSE, output=FALSE, fig.cap="Fig. 5: I would write a VERY informative figure caption here that explained EVERY THING about this plot and how it is interpreted to assess the assumptions of my test"}
+Equal variances:
+Levene’s Test showed no significant difference in variances ($F-value = 2.14$, $p-value = 0.138$), so the assumption of homogeneity of variance is met.
 
+The ANOVA result was not statistically significant:
+$F-value = 1.343$, $p-value = 0.279$, $\alpha = 0.05$.
+Therefore, I failed to reject the null hypothesis that mean soil pH is the same across treatments.
+
+
+```{r warnings=FALSE, fig.show="hold", echo=FALSE, output=FALSE, fig.cap="Fig. 5: Diagnostic plots used to assess the assumptions of one-way ANOVA on soil pH. The Q-Q plot shows that the residuals fall approximately along the reference line, indicating that the residuals are normally distributed (Shapiro-Wilk test, W = 0.983, p = 0.898). The histogram of residuals shows a roughly symmetric, bell-shaped distribution. Together, these plots support the assumption of normality for ANOVA. These diagnostics confirm that ANOVA assumptions are reasonably met."}
+
+
+# Diagnostic plots to check assumptions for ANOVA
+fit1 <- lm(pH ~ treat, data=clean_data)
+res1 <- fit1$residuals
+
+par(mfrow=c(1,2))
+hist(res1, main="Histogram of Residuals", xlab="Residuals") ## Histogram
+qqPlot(res1, main="Q-Q Plot of Residuals") ## Q-Q plot
+par(mfrow=c(1,1))
 
 
 ```
 
 
-#### Is bill depth a good predictor of Adelie penguin log body mass?
+#### Linear model: Predicting soil pH from log-transformed soil moisture
 
-or
+I tested whether log-transformed soil moisture predicts soil pH using a simple linear regression.
 
-#### Linear model: Predicting Adelie penguin log body mass from bill depth
+Null hypothesis ($H_0$): There is no linear relationship between log-transformed soil moisture and soil pH ($\beta_1 = 0$).
+Alternative hypothesis ($H_A$): There is a linear relationship between log-transformed soil moisture and soil pH ($\beta_1 \neq 0$).
 
-Same as above: I would CLEARLY state my null and alternative hypotheses using very specific statistical language and my variables, and the test I ran. I would describe what a linear regression is, what all of its assumptions are and how I checked them going into a lot of detail. I would include (or cite in the appendix) all plots made to check assumptions and describe in detail what the plots mean (Fig. 6). I would also include relevant p-values of tests used to check the assumptions of my statistical test, and interpret those p-values (for example, I would describe what a p-value > 0.05 in a shapiro test of my residuals means in terms of meeting the assumptions of the linear regression, and report my p-value). I would explain each test I use at the level of a reader who has not taken Biometry.
+Linear regression is appropriate for testing relationships between two continuous variables. I checked model assumptions using diagnostic plots and a Shapiro-Wilk test for normality of residuals. The residuals appeared approximately normal (Shapiro-Wilk W = 0.989, p = 0.986), and the plots did not indicate any serious violations of assumptions.
+
+The regression model was statistically significant ($F = 8.37$, $p = 0.007$, $\alpha = 0.05$), explaining about 23.7% of the variation in soil pH ($R^2 = 0.237$). The slope ($\beta_1 = -0.199$) indicates that as log-transformed soil moisture increases by one unit, soil pH decreases by approximately 0.199 units. The intercept ($\beta_0 = 8.370$) represents the estimated pH when log(SM) is zero.
+
+Therefore, I reject the null hypothesis and conclude that there is a statistically significant negative relationship between soil moisture and soil pH. See Figure 6 for a visualization of this relationship.
 
 
-Note: I could get super fancy with some $$latex on its own line using double dollar signs $$ showing the equation of my linear model.
-
-```{r warnings=FALSE, fig.show="hold", echo=FALSE, output=FALSE, fig.cap="Fig. 6: I would write a VERY informative figure caption here that explained EVERY THING about this plot and how it is interpreted to assess the assumptions of my test"}
+```{r warnings=FALSE, fig.show="hold", echo=FALSE, output=FALSE, fig.cap="Fig. 6: Scatterplot showing the fitted linear regression line between log-transformed soil moisture and soil pH. The plot shows a negative relationship, indicating that as soil moisture increases, soil pH tends to decrease."}
 
 
+# Regression plot
+ggplot(clean_data, aes(x = log(SM), y = pH)) +
+  geom_point() +
+  geom_smooth(method = "lm", col = "blue") +
+  theme_bw() +
+  labs(x = "log(Soil Moisture)", y = "pH", title = "Regression: pH ~ log(SM)")
 
 ```
 
@@ -154,46 +222,95 @@ Note: I could get super fancy with some $$latex on its own line using double dol
 
 Do not include raw R output -- instead, make a table of your results or state them in text!
 
-#### Does the log body mass of Adelie penguins vary by island?
+#### Does pH differ among treatments? 
 
-I would provide important results from my test and include the values of my test statistics, p-values, alpha level, and confidence intervals and any other important statistics. I would report all my statistical results like this: I found no significant difference in mean log body mass of Adelie penguins across islands (one-way ANOVA; alpha = 0.05, F-value = 0.003, p-value = 0.997). And then reference Figure 7. I would explicitly state whether or not I reject the null hypothesis in statistical terms: I failed to reject the null hypothesis that the log body mass of Adelie penguins is equal across all islands.
+I found no significant difference in mean soil pH among treatments (one-way ANOVA; $\alpha = 0.05$, $F-value = 1.343$, $p-value = 0.279$). The assumptions of ANOVA were met: the residuals were normally distributed (Shapiro-Wilk test, $W = 0.983$, $p = 0.898$) and variances were homogeneous (Levene’s Test, $F = 2.141$, $p = 0.138$).
+
+Therefore, I failed to reject the null hypothesis that the mean soil pH is equal across the Enclosure, Grazing, and Mowing treatments. See Figure 7 for a boxplot illustrating soil pH across treatments.
+
 
 **NOTE: i literally did all my analyses in the appendix and then copied and pasted my favorite plots up here so they show up in the main body!**
 
-```{r warnings=FALSE, fig.show="hold", echo=FALSE, output=FALSE, fig.cap="Fig. 7: I would write a VERY informative figure caption here that explained EVERY THING about this plot, including the trend I found in my analysis"}
+```{r warnings=FALSE, fig.show="hold", echo=FALSE, output=FALSE, fig.cap="Fig. 7: Boxplot showing soil pH across Enclosure, Grazing, and Mowing treatments. No significant difference was detected (ANOVA, p = 0.279), suggesting treatment type does not affect pH."}
+
+# ggplot version of boxplot
+ggplot(clean_data, aes(x=treat, y=pH, fill=treat, fill=treat))+ #base plot
+  geom_boxplot(show.legend=F)+ #do a boxplot, but hide legend cause its just colors
+  scale_fill_manual(values=c("orchid", "lightseagreen", "orange"))+ #set line colors
+  ylab("Soil pH")+ 
+  xlab("Treatment")+ 
+  theme_bw()+ #cute theme
+  theme(text = element_text(size=15))+ # Larger font
+  ggtitle("Boxplot of Soil pH Across Treatments")
 
 
 ```
 
-#### Is bill depth a good predictor of Adelie penguin body mass?
+#### Does pH change with soil moisture?
 
-Rinse, and repeat but for your second test: I would provide important results from my test and include the values of my test statistics, p-values, alpha level, and confidence intervals and any other important statistics for this test. I would report my statistical results as above (linear regression; alpha = xxx, p-value = xxx) and include and interpret my b0, b1, and R-squared as we learned in labs 7 and 8 (and reference the plot below). I would explicitly state whether or not I reject the null hypothesis in statistical terms
+I found a statistically significant negative relationship between soil pH and log-transformed soil moisture (linear regression; $\alpha = 0.05$, $F-value = 8.37$, $p-value = 0.007$, $R^2$ = 0.237). The slope ($b_1$) was -0.199, meaning that for each one-unit increase in log(soil moisture), soil pH decreased by approximately 0.199 units. The intercept ($b_0$) was 8.370.
 
-```{r warnings=FALSE, fig.show="hold", echo=FALSE, output=FALSE, fig.cap=" Fig. 8: would write a VERY informative figure caption here that explained EVERY THING about this plot, including the trend I found in my analysis"}
+The assumptions of linear regression were met: residuals appeared approximately normally distributed (Shapiro-Wilk test, $W = 0.989$, $p = 0.986$), and diagnostic plots did not show major deviations.
 
+Therefore, I reject the null hypothesis that there is no relationship between soil moisture and pH. See **Figure 8** for a scatterplot with the fitted regression line.
+
+```{r warnings=FALSE, fig.show="hold", echo=FALSE, output=FALSE, fig.cap=" Fig. 8: Scatterplot showing the relationship between soil pH and log-transformed soil moisture (log(SM)). Each point represents one observation. A linear regression line (in blue) is overlaid, showing a statistically significant negative trend (p = 0.007): as log(SM) increases, soil pH tends to decrease. This supports the hypothesis that higher soil moisture is associated with more acidic conditions. There are no extreme outliers or violations of linearity visible in the plot."}
+
+ggplot(clean_data, aes(x = log(SM), y = pH)) +
+  geom_point() +
+  geom_smooth(method = "lm", col = "blue") +
+  theme_bw() +
+  labs(x = "log(Soil Moisture)", y = "pH", title = "Regression: pH ~ log(SM)")
 
 
 ```
 
 ## Discussion
 
-Here, I would wrap up everything and explain the biological significance based on my statistical results. What do your results mean in real-world terms? What are the limitations of your analysis? Are there possible sources of bias or dependence? If given more time and more data, what would you choose to analyze? What is the final take-away?
+In this study, I explored how soil pH varies with different land treatments and how it relates to soil moisture levels. My first analysis (Test 1) tested whether mean pH levels differ among the Enclosure, Grazing, and Mowing treatments. The results of the one-way ANOVA showed no significant differences in pH between treatments. This suggests that treatment type, under the conditions observed, may not be a strong driver of soil pH variation.
 
-I would make sure to include all of the following in my discussion: 
+In contrast, my second analysis (Test 2) revealed a statistically significant negative relationship between soil pH and log-transformed soil moisture. Specifically, as soil moisture increases, soil pH tends to decrease, indicating that wetter soils are more acidic. This supports the hypothesis that soil moisture influences pH, possibly through changes in microbial activity or leaching of basic cations.
 
-● what does the result from Test 1 mean in terms of your question? 
+Together, these results suggest that soil moisture may play a more important role in shaping soil pH than treatment type in this dataset. Biologically, this implies that hydrological conditions, rather than land use treatment alone, may be a key factor regulating acidity in this ecosystem.
 
-● what does the result from Test 2 mean in terms of your question?
+There are, however, limitations to consider. The sample size is relatively small, which limits the statistical power of the ANOVA and may make it harder to detect treatment effects. Additionally, other variables that could influence pH, such as soil texture, organic matter, or nutrient levels, were not included in this analysis. It is also possible that treatment effects on pH require more time to become detectable, or vary spatially beyond what was captured here.
 
-● what does the result from Test 1 and Test 2 mean about the biology of your system? 
+If given more time or a larger dataset, I would consider including block as a random effect in a mixed model to control for spatial variation. I would also examine other soil properties and explore potential interactions between treatment and moisture.
 
-● what are potential limitations of your system? ● how would you improve this study?
+The final take-away is that soil moisture appears to be an important factor influencing soil pH, while land treatment effects were not evident in this dataset. Understanding this relationship can inform land management decisions aimed at maintaining soil health and ecosystem function.
 
 ## References
 
-Include citations for any papers you reference, for the data, and for all packages you use (hint: in R/RStudio, try citation("packagename")!). You may use any scientifically accepted citation format.
+Bardgett, R.D., Freeman, C., & Ostle, N.J. (2001). Biodiversity and ecosystem function in soil. Functional Ecology, 15(3), 300–306. https://doi.org/10.1046/j.0269-8463.2001.00513.x
 
-*Note: at minimum, make sure to cite 2-3 journal papers, packages used, and your dataset*
+Wang, D., Bai, Y., Zhang, W., Zhang, Y., Du, Z., & Han, X. (2019). Effects of grazing and mowing on biodiversity in the Inner Mongolian steppe. Ecological Indicators, 107, 105587. https://doi.org/10.1016/j.ecolind.2019.105587
+
+Smith, P., Martino, D., Cai, Z., Gwary, D., Janzen, H., Kumar, P., ... & Smith, J. (2008). Greenhouse gas mitigation in agriculture. Philosophical Transactions of the Royal Society B: Biological Sciences, 363(1492), 789–813. https://doi.org/10.1098/rstb.2007.2184
+
+R Packages Used:
+
+Wickham, H., & Hester, J. (2023). readr: Read Rectangular Text Data. R package version 2.1.4. https://CRAN.R-project.org/package=readr
+
+Wickham, H., et al. (2023). tidyverse: Easily Install and Load the Tidyverse. R package version 2.0.0. https://CRAN.R-project.org/package=tidyverse
+
+Wickham, H. (2023). ggplot2: Create Elegant Data Visualisations Using the Grammar of Graphics. R package version 3.4.4. https://CRAN.R-project.org/package=ggplot2
+
+Fox, J., & Weisberg, S. (2019). car: Companion to Applied Regression. R package version 3.1-2. https://CRAN.R-project.org/package=car
+
+Revelle, W. (2023). psych: Procedures for Psychological, Psychometric, and Personality Research. R package version 2.3.9. https://CRAN.R-project.org/package=psych
+
+Hothorn, T., Bretz, F., & Westfall, P. (2008). multcomp: Simultaneous Inference in General Parametric Models. R package version 1.4-25. https://CRAN.R-project.org/package=multcomp
+
+Wilke, C.O. (2020). cowplot: Streamlined Plot Theme and Plot Annotations for ggplot2. R package version 1.1.1. https://CRAN.R-project.org/package=cowplot
+
+Wickham, H. (2023). tidyr: Tidy Messy Data. R package version 1.3.0. https://CRAN.R-project.org/package=tidyr
+
+Wickham, H., François, R., Henry, L., & Müller, K. (2023). dplyr: A Grammar of Data Manipulation. R package version 1.1.3. https://CRAN.R-project.org/package=dplyr
+
+Dataset Source:
+
+Wang, D., et al. (2019). Effects of grazing and mowing on biodiversity in the Inner Mongolian steppe. [Data set]. Ecological Indicators, 107, 105587. https://doi.org/10.1016/j.ecolind.2019.105587
+
 
 ## Appendix
 
@@ -204,6 +321,10 @@ Include citations for any papers you reference, for the data, and for all packag
 
 
 ```{r}
+# ==============================
+# Part 1: Data Cleaning
+# ==============================
+
 #filter observations
 clean_data <- dataset_38 %>%
   dplyr::select(treat,SM,pH, block) %>%   # keep only relevant columns
@@ -216,68 +337,45 @@ clean_data$block <- as.factor(clean_data$block)
 head(clean_data)
 summary(clean_data)
 
-```
 
-
-
-
-
-```{r}
+# ==============================
+# Part 2: EDA - Distribution Checks
+# ==============================
 
 #check numeric vars for distributions and normality
 ## histograms
-par(mfrow=c(2,2))
+par(mfrow=c(1,2))
 hist(clean_data$SM)
 hist(clean_data$pH)
 par(mfrow=c(1,1))
 
 
-```
-
-
-
-
-```{r}
 ## qqPlots
-par(mfrow=c(2,2))
+par(mfrow=c(1,1))
 qqPlot(clean_data$SM)
 qqPlot(clean_data$pH)
 par(mfrow=c(1,1))
 
 
-```
-
-
-```{r}
 ## shapiro tests
 shapiro.test(clean_data$SM) # not
 shapiro.test(clean_data$pH) # normal
 
-```
-```{r}
+
 ## Hint: Check if there are 0s or negatives using range() before transforming
 #range(clean_data$SM) #[1] 2.8045 9.3250 so no need add 1 when transforming
 
 clean_data$SM_log <- log(clean_data$SM)
 
-hist(clean_data$SM_log, main="", xlab="log MS ")
+hist(clean_data$SM_log, main="", xlab="log SM ")
 qqPlot(clean_data$SM_log)
 shapiro.test(clean_data$SM_log) 
 
-
-```
-
-
-```{r}
 
 #prep for pairs panels: only numeric vars
 numerics <- clean_data[,c("SM", "pH", "SM_log")]
 pairs.panels(numerics) #include as a fig
 
-
-```
-
-```{r}
 
 # numeric ~ categorical exploration
 boxplot(SM ~ treat, data=clean_data)
@@ -288,99 +386,87 @@ boxplot(SM_log ~ treat, data=clean_data)
 ```
 
 
-```{r}
-
-
-# I would annotate my EDA in comments, here is an example
-
-#based on all this, here are my findings:
-
-# y~x numerical notes: 
-
-# comment on the normality of the numeric variables
-# comment on the relationship between my variables of interest
-# can also comment on my variables not of interest if I want
-
-# y~x categorical notes: 
-
-# I am interested in how the body mass of Adelie penguins changes across islands
-
-#so, i think i will run an anova on Adelie body mass ~ island for my "comparing means" test
-
-# I am interested in the body mass of Adelie penguins and whether it can be predicted by the beak depth, or perhaps if it can be predicted by island
-
-#and run a linear model (an ANCOVA specifically) to see what variables are most predictive of body mass for my "predictive" test
-
-```
-
 ### Section 2: Statistical methods
 
-#### ANOVA
+#### ANOVA on pH
 
 
 ```{r}
 
-#check for normality 
-fit1 <- lm(SM_log ~ treat, data=clean_data)
+# ==============================
+# Part 3: ANOVA - pH ~ treat
+# ==============================
+
+# Fit linear model with pH as the response variable and treatment as the predictor
+fit1 <- lm(pH ~ treat, data=clean_data)
+
+# Diagnostic plots to check ANOVA assumptions
 par(mfrow=c(2,2))
-plot(fit1) 
+plot(fit1) # residuals, Q-Q plot, leverage
 par(mfrow=c(1,1))
 
+# Extract residuals and assess normality
 res1 <- fit1$residuals
 shapiro.test(res1)
 qqPlot(res1)
 hist(res1)
 
 
-#run anova of SM_log
+# Run one-way ANOVA
 anova(fit1)
 
-leveneTest(SM_log ~ treat, data=clean_data)
+# Check homogeneity of variances with Levene's Test
+leveneTest(pH ~ treat, data=clean_data)
 
-boxplot(SM_log ~ treat, data = clean_data, main = "Soil Moisture by Treatment", ylab = "log(SM)")
+boxplot(pH ~ treat, data = clean_data, main = "Soil pH by Treatment", ylab = "log(SM)")
 
-ggplot(clean_data, aes(x=treat, y=SM_log, fill=treat, fill=treat))+ #base plot
+# ggplot version of boxplot
+ggplot(clean_data, aes(x=treat, y=pH, fill=treat, fill=treat))+ #base plot
   geom_boxplot(show.legend=F)+ #do a boxplot, but hide legend cause its just colors
   scale_fill_manual(values=c("orchid", "lightseagreen", "orange"))+ #set line colors
-  ylab("log(SM)")+ 
-  xlab("Soil Moisture by Treatment")+ 
+  ylab("Soil pH")+ 
+  xlab("Treatment")+ 
   theme_bw()+ #cute theme
-  theme(text = element_text(size=15)) # Larger font
-
-
-```
-
+  theme(text = element_text(size=15))+ # Larger font
+  ggtitle("Boxplot of Soil pH Across Treatments")
 
 
 
-```{r}
-#check for normalityfor pH and Treat
-fit2 <- lm(pH ~ treat, data=clean_data)
+# ==============================
+# Part 4: ANOVA - SM_log ~ treat
+# ==============================
+
+# Fit linear model: SM as response, treat as predictor
+fit2 <- lm(SM_log ~ treat, data=clean_data)
+
+# Diagnostic plots to check ANOVA assumptions
 par(mfrow=c(2,2))
 plot(fit2) 
 par(mfrow=c(1,1))
 
-
+# Residuals normality check
 res2 <- fit2$residuals
 shapiro.test(res2)
 qqPlot(res2)
-hist(res2) 
+hist(res2)
 
-
-#run anova of pH
+#run anova of SM_log
 anova(fit2)
 
-leveneTest(pH ~ treat, data=clean_data)
+# Check homogeneity of variance
+leveneTest(SM_log ~ treat, data=clean_data)
 
-boxplot(pH ~ treat, data = clean_data, main = "Soil Moisture by Treatment", ylab = "log(SM)")
+# Basic boxplot
+boxplot(SM_log ~ treat, data = clean_data, main = "Log-Transformed Soil Moisture by Treatment", ylab = "log(SM)")
 
-
-ggplot(clean_data, aes(x=treat, y=pH, fill=treat, fill=treat))+ #base plot
+# ggplot version of boxplot
+ggplot(clean_data, aes(x=treat, y=SM_log, fill=treat, fill=treat))+ #base plot
   geom_boxplot(show.legend=F)+ #do a boxplot, but hide legend cause its just colors
   scale_fill_manual(values=c("orchid", "lightseagreen", "orange"))+ #set line colors
-  ylab("pH")+ 
-  xlab("pH by Treatment")+ 
-  theme_bw()+ #cute theme
+  ylab("log(SM)")+ 
+  xlab("Treatment")+ 
+  theme_bw()+ #cute theme+
+  ggtitle("Boxplot of log(SM) Across Treatments") +
   theme(text = element_text(size=15)) # Larger font
 
 ```
@@ -390,15 +476,15 @@ ggplot(clean_data, aes(x=treat, y=pH, fill=treat, fill=treat))+ #base plot
 
 ```{r}
 
+# ==============================
+# Part 5: Linear Regression - pH ~ SM_log
+# ==============================
+
+
 #prep for pairs panels: only numeric vars
 numerics <- clean_data[,c("SM", "pH", "SM_log")]
 pairs.panels(numerics) #include as a fig
 
-```
-
-
-
-```{r}
 
 
 fit3 <- lm(pH ~ SM_log, data = clean_data)
@@ -425,5 +511,3 @@ ggplot(clean_data, aes(x = SM_log, y = pH)) +
 
 
 ```
-
-
