@@ -51,9 +51,9 @@ This project investigates how land management practices influence soil pH and wh
 
 ## Introduction
 
-Grasslands are critical ecosystems that provide habitat, support biodiversity, and regulate key ecological processes like nutrient cycling and soil health. Human land-use practices such as grazing and mowing can alter soil conditions, potentially affecting ecosystem function and long-term sustainability (Bardgett et al., 2001; Wang et al., 2019). Understanding how different land management strategies influence soil chemistry, particularly soil pH, is essential because pH affects nutrient availability, microbial activity, and plant growth.
+Grasslands are critical ecosystems that provide habitat, support biodiversity, and regulate essential ecological processes like nutrient cycling and soil health. Human land-use practices such as grazing and mowing can alter these soil conditions, potentially impacting ecosystem function and long-term sustainability (Bardgett et al., 2001; Wang et al., 2019; Smith et al., 2008). Understanding how land management influences soil chemistry—particularly soil pH—is important because pH affects nutrient availability, microbial communities, and plant productivity.
 
-This project uses data from a field study conducted by Wang et al. (2019) in the temperate grasslands of Inner Mongolia, China. The study examined how three land-use treatments—Enclosure, Grazing, and Mowing—affect soil properties. Data were collected in August 2017 and include variables such as soil pH, soil moisture (SM), and treatment type. After filtering, the cleaned dataset used here includes 30 observations and 5 variables.
+This project uses data from a field study conducted by Wang et al. (2019), published in the Dryad Digital Repository. The study was carried out in the temperate grasslands of Inner Mongolia, China, and investigated how three land-use treatments—Enclosure, Grazing, and Mowing—affect soil properties. Data were collected in August 2017 and include variables such as soil pH, soil moisture (SM), and treatment type. After data cleaning, the dataset used here consists of 30 observations and 5 variables.
 
 My primary research question is: Does land-use treatment influence soil pH? I used a one-way ANOVA with pH as the response variable and treatment as the predictor.
 
@@ -309,7 +309,7 @@ Wickham, H., François, R., Henry, L., & Müller, K. (2023). dplyr: A Grammar of
 
 Dataset Source:
 
-Wang, D., et al. (2019). Effects of grazing and mowing on biodiversity in the Inner Mongolian steppe. [Data set]. Ecological Indicators, 107, 105587. https://doi.org/10.1016/j.ecolind.2019.105587
+Wang, D., Ren, H., Jin, Y., & Ma, M. (2019). Effects of grazing and mowing on biodiversity in the Inner Mongolian steppe. Dryad Digital Repository. https://doi.org/10.5061/dryad.2fqz612k9
 
 
 ## Appendix
