@@ -375,21 +375,22 @@ with land use can influence soil acidity.</p>
 <div id="introduction" class="section level2">
 <h2>Introduction</h2>
 <p>Grasslands are critical ecosystems that provide habitat, support
-biodiversity, and regulate essential ecological processes like nutrient
-cycling and soil health. Human land-use practices such as grazing and
-mowing can alter these soil conditions, potentially impacting ecosystem
-function and long-term sustainability (Bardgett et al., 2001; Wang et
-al., 2019; Smith et al., 2008). Understanding how land management
-influences soil chemistry—particularly soil pH—is important because pH
-affects nutrient availability, microbial communities, and plant
-productivity.</p>
-<p>This project uses data from a field study conducted by Wang et
-al. (2019), published in the Dryad Digital Repository. The study was
+biodiversity, and regulate essential ecological processes such as
+nutrient cycling and soil health (Fitter et al., 2005; Smith et al.,
+2008). However, human land-use practices like grazing and mowing can
+significantly alter soil conditions, potentially affecting long-term
+ecosystem function and sustainability (Zheng et al., 2023; Wang et al.,
+2019). Understanding how land management influences soil
+chemistry—particularly soil pH—is important because pH regulates
+nutrient availability, shapes microbial communities, and influences
+plant productivity.</p>
+<p>This project uses data from a field study conducted by Wang, Ren,
+Jin, and Ma (2019), published in the Dryad Digital Repository (<a href="https://doi.org/10.5061/dryad.2fqz612k9" class="uri">https://doi.org/10.5061/dryad.2fqz612k9</a>). The study was
 carried out in the temperate grasslands of Inner Mongolia, China, and
-investigated how three land-use treatments—Enclosure, Grazing, and
+examined how three land-use treatments—Enclosure, Grazing, and
 Mowing—affect soil properties. Data were collected in August 2017 and
 include variables such as soil pH, soil moisture (SM), and treatment
-type. After data cleaning, the dataset used here consists of 30
+type. After data cleaning, the dataset analyzed here consists of 30
 observations and 5 variables.</p>
 <p>My primary research question is: Does land-use treatment influence
 soil pH? I used a one-way ANOVA with pH as the response variable and
@@ -663,39 +664,48 @@ function.</p>
 </div>
 <div id="references" class="section level2">
 <h2>References</h2>
-<p>Bardgett, R.D., Freeman, C., &amp; Ostle, N.J. (2001). Biodiversity
-and ecosystem function in soil. Functional Ecology, 15(3), 300–306. <a href="https://doi.org/10.1046/j.0269-8463.2001.00513.x" class="uri">https://doi.org/10.1046/j.0269-8463.2001.00513.x</a></p>
-<p>Wang, D., Bai, Y., Zhang, W., Zhang, Y., Du, Z., &amp; Han, X.
-(2019). Effects of grazing and mowing on biodiversity in the Inner
-Mongolian steppe. Ecological Indicators, 107, 105587. <a href="https://doi.org/10.1016/j.ecolind.2019.105587" class="uri">https://doi.org/10.1016/j.ecolind.2019.105587</a></p>
-<p>Smith, P., Martino, D., Cai, Z., Gwary, D., Janzen, H., Kumar, P., …
-&amp; Smith, J. (2008). Greenhouse gas mitigation in agriculture.
-Philosophical Transactions of the Royal Society B: Biological Sciences,
-363(1492), 789–813. <a href="https://doi.org/10.1098/rstb.2007.2184" class="uri">https://doi.org/10.1098/rstb.2007.2184</a></p>
+<p>Journal articles</p>
+<p>Fitter, A. H., et al. “Biodiversity and ecosystem function in soil.”
+Functional Ecology 19.3 (2005): 369–377. <a href="https://doi.org/10.1111/j.0269-8463.2005.00969.x" class="uri">https://doi.org/10.1111/j.0269-8463.2005.00969.x</a></p>
+<p>Zheng, Jiahua, et al. “Effects of fencing on near-term ecosystem
+multifunctionality in a typical steppe in Inner Mongolia.” Agriculture,
+Ecosystems &amp; Environment 342 (2023): 108238. <a href="https://doi.org/10.1016/j.agee.2022.108238" class="uri">https://doi.org/10.1016/j.agee.2022.108238</a></p>
+<p>Smith, Pete, et al. “Greenhouse gas mitigation in agriculture.”
+Philosophical Transactions of the Royal Society B: Biological Sciences
+363.1492 (2008): 789–813. <a href="https://doi.org/10.1098/rstb.2007.2184" class="uri">https://doi.org/10.1098/rstb.2007.2184</a></p>
 <p>R Packages Used:</p>
-<p>Wickham, H., &amp; Hester, J. (2023). readr: Read Rectangular Text
-Data. R package version 2.1.4. <a href="https://CRAN.R-project.org/package=readr" class="uri">https://CRAN.R-project.org/package=readr</a></p>
-<p>Wickham, H., et al. (2023). tidyverse: Easily Install and Load the
-Tidyverse. R package version 2.0.0. <a href="https://CRAN.R-project.org/package=tidyverse" class="uri">https://CRAN.R-project.org/package=tidyverse</a></p>
-<p>Wickham, H. (2023). ggplot2: Create Elegant Data Visualisations Using
-the Grammar of Graphics. R package version 3.4.4. <a href="https://CRAN.R-project.org/package=ggplot2" class="uri">https://CRAN.R-project.org/package=ggplot2</a></p>
-<p>Fox, J., &amp; Weisberg, S. (2019). car: Companion to Applied
-Regression. R package version 3.1-2. <a href="https://CRAN.R-project.org/package=car" class="uri">https://CRAN.R-project.org/package=car</a></p>
-<p>Revelle, W. (2023). psych: Procedures for Psychological,
-Psychometric, and Personality Research. R package version 2.3.9. <a href="https://CRAN.R-project.org/package=psych" class="uri">https://CRAN.R-project.org/package=psych</a></p>
-<p>Hothorn, T., Bretz, F., &amp; Westfall, P. (2008). multcomp:
-Simultaneous Inference in General Parametric Models. R package version
-1.4-25. <a href="https://CRAN.R-project.org/package=multcomp" class="uri">https://CRAN.R-project.org/package=multcomp</a></p>
-<p>Wilke, C.O. (2020). cowplot: Streamlined Plot Theme and Plot
-Annotations for ggplot2. R package version 1.1.1. <a href="https://CRAN.R-project.org/package=cowplot" class="uri">https://CRAN.R-project.org/package=cowplot</a></p>
-<p>Wickham, H. (2023). tidyr: Tidy Messy Data. R package version 1.3.0.
-<a href="https://CRAN.R-project.org/package=tidyr" class="uri">https://CRAN.R-project.org/package=tidyr</a></p>
-<p>Wickham, H., François, R., Henry, L., &amp; Müller, K. (2023). dplyr:
-A Grammar of Data Manipulation. R package version 1.1.3. <a href="https://CRAN.R-project.org/package=dplyr" class="uri">https://CRAN.R-project.org/package=dplyr</a></p>
+<p>Fox J, Weisberg S (2019). <em>An R Companion to Applied
+Regression</em>, Third edition. Sage, Thousand Oaks CA. <a href="https://www.john-fox.ca/Companion/" class="uri">https://www.john-fox.ca/Companion/</a>.</p>
+<p>Hothorn T, Bretz F, Westfall P (2008). “Simultaneous Inference in
+General Parametric Models.” <em>Biometrical Journal</em>,
+<em>50</em>(3), 346-363.</p>
+<p>William Revelle (2025). <em>psych: Procedures for Psychological,
+Psychometric, and Personality Research</em>. Northwestern University,
+Evanston, Illinois. R package version 2.5.6, <a href="https://CRAN.R-project.org/package=psych" class="uri">https://CRAN.R-project.org/package=psych</a>.</p>
+<p>H. Wickham. ggplot2: Elegant Graphics for Data Analysis.
+Springer-Verlag New York, 2016.</p>
+<p>Wickham H, Averick M, Bryan J, Chang W, McGowan LD, François R,
+Grolemund G, Hayes A, Henry L, Hester J, Kuhn M, Pedersen TL, Miller E,
+Bache SM, Müller K, Ooms J, Robinson D, Seidel DP, Spinu V, Takahashi K,
+Vaughan D, Wilke C, Woo K, Yutani H (2019). “Welcome to the tidyverse.”
+<em>Journal of Open Source Software</em>, <em>4</em>(43), 1686. <a href="doi:10.21105/joss.01686" class="uri">doi:10.21105/joss.01686</a>
+<a href="https://doi.org/10.21105/joss.01686" class="uri">https://doi.org/10.21105/joss.01686</a>.</p>
+<p>Wickham H, François R, Henry L, Müller K, Vaughan D (2023).
+<em>dplyr: A Grammar of Data Manipulation</em>. <a href="doi:10.32614/CRAN.package.dplyr" class="uri">doi:10.32614/CRAN.package.dplyr</a> <a href="https://doi.org/10.32614/CRAN.package.dplyr" class="uri">https://doi.org/10.32614/CRAN.package.dplyr</a>, R package
+version 1.1.4, <a href="https://CRAN.R-project.org/package=dplyr" class="uri">https://CRAN.R-project.org/package=dplyr</a>.</p>
+<p>Wickham H, Hester J, Bryan J (2024). <em>readr: Read Rectangular Text
+Data</em>. <a href="doi:10.32614/CRAN.package.readr" class="uri">doi:10.32614/CRAN.package.readr</a> <a href="https://doi.org/10.32614/CRAN.package.readr" class="uri">https://doi.org/10.32614/CRAN.package.readr</a>, R package
+version 2.1.5, <a href="https://CRAN.R-project.org/package=readr" class="uri">https://CRAN.R-project.org/package=readr</a>.</p>
+<p>Wickham H, Vaughan D, Girlich M (2024). <em>tidyr: Tidy Messy
+Data</em>. <a href="doi:10.32614/CRAN.package.tidyr" class="uri">doi:10.32614/CRAN.package.tidyr</a> <a href="https://doi.org/10.32614/CRAN.package.tidyr" class="uri">https://doi.org/10.32614/CRAN.package.tidyr</a>, R package
+version 1.3.1, <a href="https://CRAN.R-project.org/package=tidyr" class="uri">https://CRAN.R-project.org/package=tidyr</a>.</p>
+<p>Wilke C (2024). <em>cowplot: Streamlined Plot Theme and Plot
+Annotations for ‘ggplot2’</em>. <a href="doi:10.32614/CRAN.package.cowplot" class="uri">doi:10.32614/CRAN.package.cowplot</a> <a href="https://doi.org/10.32614/CRAN.package.cowplot" class="uri">https://doi.org/10.32614/CRAN.package.cowplot</a>, R package
+version 1.1.3, <a href="https://CRAN.R-project.org/package=cowplot" class="uri">https://CRAN.R-project.org/package=cowplot</a>.</p>
 <p>Dataset Source:</p>
-<p>Wang, D., Ren, H., Jin, Y., &amp; Ma, M. (2019). Effects of grazing
-and mowing on biodiversity in the Inner Mongolian steppe. Dryad Digital
-Repository. <a href="https://doi.org/10.5061/dryad.2fqz612k9" class="uri">https://doi.org/10.5061/dryad.2fqz612k9</a></p>
+<p>Wang, D., Ren, H., Jin, Y., &amp; Ma, M. (2019). Land use alters
+relationships of grassland productivity with plant and arthropod
+diversity in Inner Mongolian grassland. <a href="https://doi.org/10.5061/dryad.2fqz612k9" class="uri">https://doi.org/10.5061/dryad.2fqz612k9</a></p>
 </div>
 <div id="appendix" class="section level2">
 <h2>Appendix</h2>

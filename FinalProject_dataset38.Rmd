@@ -1,5 +1,6 @@
 ---
-title: "EEMB 146 Final Report: Down to the Root: Digging into Soil pH and Moisture in Managed Grasslands"
+title: 'EEMB 146 Final Report: Down to the Root: Digging into Soil pH and Moisture
+  in Managed Grasslands'
 author: "Linh Dang"
 date: "today"
 output: html_document
@@ -17,12 +18,12 @@ library(readr) # package for reading in data
 library(tidyverse)
 library(ggplot2)
 library(car)
-#install.packages("psych")
 library(psych)
 library(multcomp)
 library(cowplot)
 library(tidyr)
 library(dplyr)
+
 
 # include other libraries you may need
 
@@ -44,16 +45,15 @@ clean_data$block <- as.factor(clean_data$block)
 ```
 
 
-
 ## Abstract
 
 This project investigates how land management practices influence soil pH and whether soil moisture serves as a predictor of pH in a temperate grassland ecosystem. The dataset includes measurements of soil pH and soil moisture under three treatments: Enclosure, Grazing, and Mowing. We conducted a one-way ANOVA to assess differences in soil pH across treatments and used linear regression to test whether log-transformed soil moisture predicts pH. The ANOVA revealed no significant differences in soil pH among treatments. However, the regression analysis showed a significant negative relationship between soil moisture and pH. These findings suggest that while treatment type may not directly affect soil pH, changes in soil moisture associated with land use can influence soil acidity.
 
 ## Introduction
 
-Grasslands are critical ecosystems that provide habitat, support biodiversity, and regulate essential ecological processes like nutrient cycling and soil health. Human land-use practices such as grazing and mowing can alter these soil conditions, potentially impacting ecosystem function and long-term sustainability (Bardgett et al., 2001; Wang et al., 2019; Smith et al., 2008). Understanding how land management influences soil chemistry—particularly soil pH—is important because pH affects nutrient availability, microbial communities, and plant productivity.
+Grasslands are critical ecosystems that provide habitat, support biodiversity, and regulate essential ecological processes such as nutrient cycling and soil health (Fitter et al., 2005; Smith et al., 2008). However, human land-use practices like grazing and mowing can significantly alter soil conditions, potentially affecting long-term ecosystem function and sustainability (Zheng et al., 2023; Wang et al., 2019). Understanding how land management influences soil chemistry—particularly soil pH—is important because pH regulates nutrient availability, shapes microbial communities, and influences plant productivity.
 
-This project uses data from a field study conducted by Wang et al. (2019), published in the Dryad Digital Repository. The study was carried out in the temperate grasslands of Inner Mongolia, China, and investigated how three land-use treatments—Enclosure, Grazing, and Mowing—affect soil properties. Data were collected in August 2017 and include variables such as soil pH, soil moisture (SM), and treatment type. After data cleaning, the dataset used here consists of 30 observations and 5 variables.
+This project uses data from a field study conducted by Wang, Ren, Jin, and Ma (2019), published in the Dryad Digital Repository (https://doi.org/10.5061/dryad.2fqz612k9). The study was carried out in the temperate grasslands of Inner Mongolia, China, and examined how three land-use treatments—Enclosure, Grazing, and Mowing—affect soil properties. Data were collected in August 2017 and include variables such as soil pH, soil moisture (SM), and treatment type. After data cleaning, the dataset analyzed here consists of 30 observations and 5 variables.
 
 My primary research question is: Does land-use treatment influence soil pH? I used a one-way ANOVA with pH as the response variable and treatment as the predictor.
 
@@ -281,35 +281,38 @@ The final take-away is that soil moisture appears to be an important factor infl
 
 ## References
 
-Bardgett, R.D., Freeman, C., & Ostle, N.J. (2001). Biodiversity and ecosystem function in soil. Functional Ecology, 15(3), 300–306. https://doi.org/10.1046/j.0269-8463.2001.00513.x
+Journal articles
 
-Wang, D., Bai, Y., Zhang, W., Zhang, Y., Du, Z., & Han, X. (2019). Effects of grazing and mowing on biodiversity in the Inner Mongolian steppe. Ecological Indicators, 107, 105587. https://doi.org/10.1016/j.ecolind.2019.105587
+Fitter, A. H., et al. “Biodiversity and ecosystem function in soil.” Functional Ecology 19.3 (2005): 369–377. https://doi.org/10.1111/j.0269-8463.2005.00969.x
 
-Smith, P., Martino, D., Cai, Z., Gwary, D., Janzen, H., Kumar, P., ... & Smith, J. (2008). Greenhouse gas mitigation in agriculture. Philosophical Transactions of the Royal Society B: Biological Sciences, 363(1492), 789–813. https://doi.org/10.1098/rstb.2007.2184
+Zheng, Jiahua, et al. “Effects of fencing on near-term ecosystem multifunctionality in a typical steppe in Inner Mongolia.” Agriculture, Ecosystems & Environment 342 (2023): 108238. https://doi.org/10.1016/j.agee.2022.108238
+
+Smith, Pete, et al. “Greenhouse gas mitigation in agriculture.” Philosophical Transactions of the Royal Society B: Biological Sciences 363.1492 (2008): 789–813. https://doi.org/10.1098/rstb.2007.2184
+
 
 R Packages Used:
 
-Wickham, H., & Hester, J. (2023). readr: Read Rectangular Text Data. R package version 2.1.4. https://CRAN.R-project.org/package=readr
+Fox J, Weisberg S (2019). _An R Companion to Applied Regression_, Third edition. Sage, Thousand Oaks CA. <https://www.john-fox.ca/Companion/>.
 
-Wickham, H., et al. (2023). tidyverse: Easily Install and Load the Tidyverse. R package version 2.0.0. https://CRAN.R-project.org/package=tidyverse
+Hothorn T, Bretz F, Westfall P (2008). “Simultaneous Inference in General Parametric Models.” _Biometrical Journal_, *50*(3), 346-363.
 
-Wickham, H. (2023). ggplot2: Create Elegant Data Visualisations Using the Grammar of Graphics. R package version 3.4.4. https://CRAN.R-project.org/package=ggplot2
+William Revelle (2025). _psych: Procedures for Psychological, Psychometric, and Personality Research_. Northwestern University, Evanston, Illinois. R package version 2.5.6, <https://CRAN.R-project.org/package=psych>.
 
-Fox, J., & Weisberg, S. (2019). car: Companion to Applied Regression. R package version 3.1-2. https://CRAN.R-project.org/package=car
+H. Wickham. ggplot2: Elegant Graphics for Data Analysis. Springer-Verlag New York, 2016.
 
-Revelle, W. (2023). psych: Procedures for Psychological, Psychometric, and Personality Research. R package version 2.3.9. https://CRAN.R-project.org/package=psych
+Wickham H, Averick M, Bryan J, Chang W, McGowan LD, François R, Grolemund G, Hayes A, Henry L, Hester J, Kuhn M, Pedersen TL, Miller E, Bache SM, Müller K, Ooms J, Robinson D, Seidel DP, Spinu V, Takahashi K, Vaughan D, Wilke C, Woo K, Yutani H (2019). “Welcome to the tidyverse.” _Journal of Open Source Software_, *4*(43), 1686. doi:10.21105/joss.01686 <https://doi.org/10.21105/joss.01686>.
 
-Hothorn, T., Bretz, F., & Westfall, P. (2008). multcomp: Simultaneous Inference in General Parametric Models. R package version 1.4-25. https://CRAN.R-project.org/package=multcomp
+Wickham H, François R, Henry L, Müller K, Vaughan D (2023). _dplyr: A Grammar of Data Manipulation_. doi:10.32614/CRAN.package.dplyr <https://doi.org/10.32614/CRAN.package.dplyr>, R package version 1.1.4, <https://CRAN.R-project.org/package=dplyr>.
 
-Wilke, C.O. (2020). cowplot: Streamlined Plot Theme and Plot Annotations for ggplot2. R package version 1.1.1. https://CRAN.R-project.org/package=cowplot
+Wickham H, Hester J, Bryan J (2024). _readr: Read Rectangular Text Data_. doi:10.32614/CRAN.package.readr <https://doi.org/10.32614/CRAN.package.readr>, R package version 2.1.5, <https://CRAN.R-project.org/package=readr>.
 
-Wickham, H. (2023). tidyr: Tidy Messy Data. R package version 1.3.0. https://CRAN.R-project.org/package=tidyr
+Wickham H, Vaughan D, Girlich M (2024). _tidyr: Tidy Messy Data_. doi:10.32614/CRAN.package.tidyr <https://doi.org/10.32614/CRAN.package.tidyr>, R package version 1.3.1, <https://CRAN.R-project.org/package=tidyr>.
 
-Wickham, H., François, R., Henry, L., & Müller, K. (2023). dplyr: A Grammar of Data Manipulation. R package version 1.1.3. https://CRAN.R-project.org/package=dplyr
+Wilke C (2024). _cowplot: Streamlined Plot Theme and Plot Annotations for 'ggplot2'_. doi:10.32614/CRAN.package.cowplot <https://doi.org/10.32614/CRAN.package.cowplot>, R package version 1.1.3, <https://CRAN.R-project.org/package=cowplot>.
 
 Dataset Source:
 
-Wang, D., Ren, H., Jin, Y., & Ma, M. (2019). Effects of grazing and mowing on biodiversity in the Inner Mongolian steppe. Dryad Digital Repository. https://doi.org/10.5061/dryad.2fqz612k9
+Wang, D., Ren, H., Jin, Y., & Ma, M. (2019). Land use alters relationships of grassland productivity with plant and arthropod diversity in Inner Mongolian grassland. https://doi.org/10.5061/dryad.2fqz612k9
 
 
 ## Appendix
